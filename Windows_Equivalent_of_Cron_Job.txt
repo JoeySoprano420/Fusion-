@@ -1,0 +1,25 @@
+🪟 Windows Equivalent of Cron Job:
+To replicate 0 2 * * 1 /usr/bin/python3 /path/to/weekly_retrain.py on Windows, use Task Scheduler:
+
+🔧 Steps:
+Open Task Scheduler → Create Basic Task
+
+Name: Fusion++ Weekly Retrain
+
+Trigger: Weekly, every Monday at 2:00 AM
+
+Action: Start a Program
+
+Program/script:
+nginx:
+python
+
+Add arguments:
+Arduino:
+"C:\FusionPP\weekly_retrain.py"
+
+Start in (optional):
+Makefile:
+C:\FusionPP
+
+✅ Now Fusion++ retrains itself weekly even on Windows.
