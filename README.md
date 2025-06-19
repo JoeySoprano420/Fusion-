@@ -752,3 +752,8 @@ Bottom line: Fusion++ is like the bare-metal dev kit for game architects—a hig
 
 
 
+Dependencies:
+Download nlohmann/json header (put as include/json.hpp)
+Compile with:
+bash:
+g++ fusionpp_runtime.cpp -std=c++17 -lpthread -o fusionpp_runtime
