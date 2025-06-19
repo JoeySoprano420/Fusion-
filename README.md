@@ -24,3 +24,13 @@ FUSION++ source code (.fpp)
 🔽 JIT Compilation → c2exe: builds .exe using embedded Clang/GCC
 
 🔽 Runtime patcher injects inline ASM segments and texture/audio memory maps
+
+TYPE SYSTEM
+| Type Alias  | Base Type   | Behavior                  |
+| ----------- | ----------- | ------------------------- |
+| `entity`    | struct      | Position, draw, animate   |
+| `state<T>`  | variant     | Stores logical state flow |
+| `derive`    | template    | Functional trait mapping  |
+| `memory<N>` | byte buffer | Manual memory control     |
+
+
