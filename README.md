@@ -579,3 +579,12 @@ Login / Connect to Host IP
 | 📼 Replay & Feedback  | All logged, reviewed, re-used        |
 
 
+✅ COMPLETE FLOW: FROM INPUT TO LIVE LEARNING
+| Step                 | Component          | Description                              |
+| -------------------- | ------------------ | ---------------------------------------- |
+| 🔁 Persistent AI     | `offline_ai.cpp`   | Learns & remembers `.fpp` code by intent |
+| 🧠 Hybrid Suggestion | `hybrid_ai.py`     | Uses GPT if available, otherwise offline |
+| 🎨 Intent GUI        | `fusion_ai_gui.py` | Generates editable .fpp suggestions      |
+
+
+
