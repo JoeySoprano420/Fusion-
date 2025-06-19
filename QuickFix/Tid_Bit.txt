@@ -117,3 +117,11 @@ In your code, accept argv[1] as a fusionpp:// URL (parse and open the file).
 In the browser/address bar/run dialog:
 fusionpp://C:/Projects/Test.fpp
 → Launches your editor with the target file.
+
+How to Use fusionpp:// URLs:
+In your code, accept argv[1] as a fusionpp:// URL (parse and open the file).
+
+In the browser/address bar/run dialog:
+fusionpp://C:/Projects/Test.fpp
+→ Launches your editor with the target file.
+
