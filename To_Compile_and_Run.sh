@@ -16,3 +16,6 @@ g++ -o fusionpp fusion_compile_main.cpp -lssl -lcrypto
 ./fusionpp
 ./main.exe
 
+g++ main_runtime.cpp -std=c++17 -o fusion_live
+./fusion_live
+
