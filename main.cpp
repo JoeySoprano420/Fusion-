@@ -37,3 +37,7 @@ int main() {
 
     return 0;
 }
+
+#include "include/json.hpp"
+using json = nlohmann::json;
+
