@@ -44,3 +44,49 @@ User can pick Desktop Shortcut and Asset/Header install
 Auto-launches the Fusion++ IDE GUI on completion
 
 Branding text in installer window
+
+
+
+Here’s a fully loaded NSIS installer script for Fusion++ that includes:
+
+Your license text page (just drop your license.txt in the build folder)
+
+Custom icon and banner (provide fusionpp.ico and banner.bmp)
+
+Start menu shortcut
+
+File association for .fpp files
+
+Registry uninstall entry
+
+Silent install capability
+
+You only need to provide your icon (fusionpp.ico), banner image (banner.bmp), and your actual app path for this to be a production installer.
+
+📦 fusionpp_installer.nsi (with License, Icon, Banner, Start Menu, File Assoc, Registry)
+
+🟢 What this does:
+Branding: Uses your icons and banner for a professional installer look.
+
+License: Displays your license.txt during install.
+
+Start Menu & Desktop: Adds shortcuts.
+
+File Association: Double-click .fpp opens in the IDE.
+
+Registry: Adds uninstall entry for Windows Control Panel.
+
+Auto-launch: Opens IDE after install (unless silent).
+
+Silent Install: FusionPP_Setup.exe /S installs quietly.
+
+🚀 What to provide in your build folder:
+fusionpp.ico & fusionpp-uninstall.ico (app/uninstaller icons)
+
+banner.bmp (installer banner, 500x70px)
+
+license.txt (your SUET license, as posted)
+
+Everything inside the dist folder after build
+
+This script as fusionpp_installer.nsi
