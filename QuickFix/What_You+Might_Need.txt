@@ -1,0 +1,22 @@
+🟢 How to Use
+Install NSIS: Download here
+
+Place this script as fusionpp_installer.nsi in your project folder.
+
+Make sure your dist folder is complete (see previous build.bat output).
+
+Open NSIS and compile the script (fusionpp_installer.nsi).
+
+This will produce FusionPP_Setup.exe—your all-in-one installer!
+
+🚀 What does this install?
+All main binaries: fusionpp_runtime.exe, fusionpp_multiplayer_gui.exe, ai_bridge.exe
+
+All required Qt DLLs (expand the list if more are needed)
+
+Assets and headers: assets/, include/
+
+README.txt
+
+Creates a desktop shortcut for the GUI
+
