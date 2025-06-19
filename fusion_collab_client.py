@@ -1,5 +1,8 @@
 import tkinter as tk, asyncio, websockets, threading
 from subprocess import check_output
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QUrl>
 
 uri = "ws://localhost:9876"
 
@@ -42,3 +45,29 @@ text.pack()
 
 start_client(text)
 root.mainloop()
+
+// In the constructor, after fppEdit is created:
+fppEdit->setAcceptDrops(true);
+
+// Override QWidget drag/drop events
+protected:
+    void dragEnterEvent(QDragEnterEvent* e) override {
+        if (e->mimeData()->hasUrls()) e->acceptProposedAction();
+    }
+    void dropEvent(QDropEvent* e) override {
+        foreach (const QUrl& url, e->mimeData()->urls()) {
+            QString fileName = url.toLocalFile();
+            if (fileName.endsWith(".fpp") || fileName.endsWith(".txt")) {
+                QFile file(fileName);
+                if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    QTextStream in(&file);
+                    fppEdit->setPlainText(in.readAll());
+                }
+            } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                // Insert asset tag, or custom asset logic:
+                fppEdit->append(QString("// [asset] %1").arg(fileName));
+            }
+        }
+    }
+
+setAcceptDrops(true);
