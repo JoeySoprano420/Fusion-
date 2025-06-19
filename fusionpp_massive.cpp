@@ -170,3 +170,131 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <map>
+#include <set>
+#include <thread>
+#include <mutex>
+#include <cmath>
+#include <chrono>
+#include <functional>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
+// ———————————————————————————————————————
+// Compiler AI Learning Engine
+// ———————————————————————————————————————
+struct CompilerPattern {
+    std::string patternName;
+    int appearances = 0;
+    int user_accepts = 0;
+    int user_rejects = 0;
+    std::string generatedCode;
+
+    void registerUse(bool accepted) {
+        appearances++;
+        if (accepted) user_accepts++;
+        else user_rejects++;
+    }
+
+    float reliability() const {
+        return (user_accepts + 1.0f) / (user_rejects + 1.0f);
+    }
+};
+
+class CompilerAI {
+    std::string dataFile = "fusion_compiler_ai.json";
+    std::map<std::string, CompilerPattern> learnedPatterns;
+
+public:
+    CompilerAI() { load(); }
+
+    void load() {
+        std::ifstream f(dataFile);
+        if (!f.is_open()) return;
+        json j; f >> j;
+        for (auto& el : j.items()) {
+            CompilerPattern p;
+            p.patternName = el.key();
+            p.appearances = el.value()["appearances"];
+            p.user_accepts = el.value()["user_accepts"];
+            p.user_rejects = el.value()["user_rejects"];
+            p.generatedCode = el.value()["generatedCode"];
+            learnedPatterns[p.patternName] = p;
+        }
+    }
+
+    void save() {
+        json j;
+        for (auto& [k, v] : learnedPatterns) {
+            j[k] = {
+                {"appearances", v.appearances},
+                {"user_accepts", v.user_accepts},
+                {"user_rejects", v.user_rejects},
+                {"generatedCode", v.generatedCode}
+            };
+        }
+        std::ofstream out(dataFile);
+        out << j.dump(4);
+    }
+
+    void observePattern(const std::string& name, const std::string& code, bool accepted) {
+        if (!learnedPatterns.count(name))
+            learnedPatterns[name] = CompilerPattern{name, 0, 0, 0, code};
+        learnedPatterns[name].registerUse(accepted);
+        save();
+    }
+
+    std::string suggestEnhancement(const std::string& context) {
+        float bestScore = 0;
+        std::string bestCode;
+        for (const auto& [name, p] : learnedPatterns) {
+            if (context.find(name) != std::string::npos && p.reliability() > bestScore) {
+                bestScore = p.reliability();
+                bestCode = p.generatedCode;
+            }
+        }
+        return bestCode;
+    }
+
+    void trainFromCodebase(const std::vector<std::string>& lines) {
+        for (const auto& line : lines) {
+            if (line.find("instruction") != std::string::npos) {
+                observePattern("instruction", "func auto_generated() { /*...*/ }", true);
+            } else if (line.find("ai") != std::string::npos) {
+                observePattern("ai", "define new_ai derives Adaptive", true);
+            }
+        }
+    }
+};
+
+// ———————————————————————————————————————
+// Minimal runtime example
+// ———————————————————————————————————————
+int main() {
+    std::cout << "🧠 Fusion++ AI Compiler Booting Up...\n";
+
+    CompilerAI ai;
+    ai.observePattern("loop", "loop { print(\"adaptive loop\") }", true);
+    ai.observePattern("ai", "define smart_ai derives Reflexive", true);
+
+    std::string context = "ai loop patrol";
+    std::string suggestion = ai.suggestEnhancement(context);
+
+    if (!suggestion.empty()) {
+        std::cout << "\n✨ AI Compiler Suggestion:\n" << suggestion << "\n";
+    } else {
+        std::cout << "\n(No suggestion available for context: " << context << ")\n";
+    }
+
+    return 0;
+}
+
