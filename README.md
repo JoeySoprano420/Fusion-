@@ -376,3 +376,13 @@ observePattern(name, code, accepted) – logs and evaluates pattern usefulness
 trainFromCodebase(...) – allows bootstrapping from existing .fpp source files
 
 
+✅ What This Compiler Does:
+Observes code structure while compiling (e.g., loops, instructions, ai blocks).
+
+Stores pattern metadata (appearances, accepts, rejects) in fusion_compiler_ai.json.
+
+Suggests new code to the user based on context with highest reliability scores.
+
+Improves itself as more .fpp files are written and compiled.
+
+
