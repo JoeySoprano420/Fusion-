@@ -1,0 +1,4 @@
+{
+  "spawn enemies": "func spawn_wave\n    let count = 5\n    print \"Spawning wave of enemies\"\nendfunc",
+  "heal player": "func heal_player\n    let health = 100\n    print \"Player healed\"\nendfunc"
+}
