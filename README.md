@@ -849,3 +849,32 @@ Works on Windows, Linux, and macOS.
 
 
 
+How to Build:
+Install Qt5 or Qt6 (sudo apt install qtbase5-dev qt5-qmake)
+
+Save code as fusionpp_multiplayer_gui.cpp
+
+In the same folder:
+Bash:
+qmake -project
+qmake
+make
+./fusionpp_multiplayer_gui
+
+Or use Qt Creator (import .cpp, build, run).
+
+
+
+Features you now have:
+Multiplayer Command Tab:
+Connect, send any command, see live output
+
+Live .fpp Editor Tab:
+Edit, open, save, send .fpp scripts directly to Fusion++ engine (autorun)
+
+Log & Events Tab:
+Auto-updating log display
+Realtime event frequency graph (see which commands are hottest)
+
+
+
