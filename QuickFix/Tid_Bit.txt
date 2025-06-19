@@ -1,4 +1,4 @@
-full-featured NSIS installer script for Fusion++ with:
+full-featured NSIS installer script for Fusion++ comes with:
 
 License page
 
