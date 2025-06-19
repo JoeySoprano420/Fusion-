@@ -418,3 +418,13 @@ Feature	✅ Implemented
 🔐 Encryption (SHA256)	✅ OpenSSL-powered hashing
 
 
+🔥 How this works:
+AST built from .fpp
+
+IRCompiler emits compact bytecode
+
+FusionRuntime interprets and executes bytecode, tracks stats, writes JIT feedback
+
+Hot runtime events are written back as .fpp for dev introspection
+
+
