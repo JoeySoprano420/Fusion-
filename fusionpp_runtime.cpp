@@ -327,3 +327,223 @@ int main() {
     std::cout << "[💾] Exiting. Bye!\n";
     return 0;
 }
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <thread>
+#include <mutex>
+#include <nlohmann/json.hpp>
+#include <asio.hpp> // Use standalone Asio (https://think-async.com/Asio/)
+using json = nlohmann::json;
+
+// ====== AI Runtime Modes ======
+enum class AIMode { GPT, LORA };
+AIMode aiMode = AIMode::GPT;
+
+void toggle_ai_mode(const std::string& mode) {
+    aiMode = (mode == "lora") ? AIMode::LORA : AIMode::GPT;
+    std::cout << "[🌌] AI mode set to: " << (aiMode == AIMode::GPT ? "GPT" : "LoRA") << std::endl;
+}
+
+#include <sstream>
+#include <iomanip>
+
+std::string format_autogen(const std::string& model, const std::string& prompt, const std::string& body) {
+    std::ostringstream out;
+    out << "// [" << model << "] Completion for: " << prompt << "\n";
+    out << "func " << model << "_autogen()\n";
+    out << "  log \"AI model: " << model << "\"\n";
+    out << "  print \"" << body << "\"\n";
+    out << "endfunc\n";
+    return out.str();
+}
+
+std::string ai_complete(const std::string& prompt) {
+    using fusionpp::RuntimeConfig;
+
+    AIMode mode = RuntimeConfig::getInstance().getMode();
+    std::string trimmedPrompt = prompt.substr(0, 256); // Optional truncation for safety
+    std::string result;
+
+    switch (mode) {
+        case AIMode::GPT:
+            result = format_autogen("gpt", trimmedPrompt, "Responded with GPT logic");
+            break;
+        case AIMode::LoRA:
+            result = format_autogen("lora", trimmedPrompt, "LoRA-powered synthesis executed");
+            break;
+        default:
+            throw std::runtime_error("Unsupported AIMode during completion dispatch.");
+    }
+
+#if FUSIONPP_ENABLE_PROFILING
+    std::cerr << "[Completion] " << modeToString(mode)
+              << " executed for prompt: \"" << trimmedPrompt << "\"\n";
+#endif
+
+    return result;
+}
+
+
+// ====== Input & Action Binding ======
+std::unordered_map<std::string, std::function<void(const std::string&)>> inputActions;
+std::mutex reloadMutex;
+std::string lastScript;
+
+void bind_input(const std::string& key, std::function<void(const std::string&)> handler) {
+    inputActions[key] = handler;
+    std::cout << "[🎮] Bound input: " << key << std::endl;
+}
+
+// ====== Bytecode System ======
+struct Bytecode {
+    std::string op;
+    std::vector<std::string> args;
+};
+using BytecodeFunc = std::vector<Bytecode>;
+std::unordered_map<std::string, BytecodeFunc> bytecodeRegistry;
+
+void load_bytecode(const std::string& file) {
+    std::ifstream in(file);
+    if (!in) { std::cout << "[❌] Bytecode file not found: " << file << std::endl; return; }
+    std::string line, funcName;
+    BytecodeFunc current;
+    while (std::getline(in, line)) {
+        if (line.find("func ") == 0) {
+            if (!current.empty() && !funcName.empty())
+                bytecodeRegistry[funcName] = current;
+            funcName = line.substr(5);
+            current.clear();
+        } else if (line.find("print") == 0) {
+            size_t q = line.find("\"");
+            size_t q2 = line.rfind("\"");
+            std::string msg = (q != std::string::npos && q2 != q) ? line.substr(q+1, q2-q-1) : "???";
+            current.push_back({"print", {msg}});
+        } // Add more ops as needed
+    }
+    if (!current.empty() && !funcName.empty())
+        bytecodeRegistry[funcName] = current;
+    std::cout << "[💾] Loaded bytecode from: " << file << std::endl;
+}
+
+void run_bytecode(const std::string& name) {
+    if (!bytecodeRegistry.count(name)) {
+        std::cout << "[❌] Bytecode not found: " << name << std::endl;
+        return;
+    }
+    std::cout << "[🚦] Running bytecode: " << name << std::endl;
+    for (auto& b : bytecodeRegistry[name]) {
+        if (b.op == "print") std::cout << "[PRINT] " << b.args[0] << std::endl;
+    }
+}
+
+// ====== Multiplayer Input via TCP Socket ======
+void multiplayer_input_listener(unsigned short port) {
+    try {
+        asio::io_context io;
+        asio::ip::tcp::acceptor acceptor(io, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port));
+        std::cout << "[🔗] Multiplayer input server listening on port " << port << "...\n";
+        while (true) {
+            asio::ip::tcp::socket socket(io);
+            acceptor.accept(socket);
+            std::array<char, 256> buf{};
+            asio::error_code ec;
+            size_t len = socket.read_some(asio::buffer(buf), ec);
+            if (!ec && len > 0) {
+                std::string msg(buf.data(), len);
+                std::cout << "[🌍 Multiplayer] Received: " << msg << std::endl;
+                size_t sp = msg.find(' ');
+                std::string cmd = sp != std::string::npos ? msg.substr(0, sp) : msg;
+                std::string arg = sp != std::string::npos ? msg.substr(sp + 1) : "";
+                if (inputActions.count(cmd)) inputActions[cmd](arg);
+            }
+        }
+    } catch (std::exception& e) {
+        std::cout << "[❌] Multiplayer listener error: " << e.what() << "\n";
+    }
+}
+
+// ====== Web Dashboard Hook (Very Basic HTTP) ======
+void web_dashboard(unsigned short port) {
+    try {
+        asio::io_context io;
+        asio::ip::tcp::acceptor acceptor(io, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port));
+        std::cout << "[🌐] Web dashboard active on port " << port << "\n";
+        while (true) {
+            asio::ip::tcp::socket socket(io);
+            acceptor.accept(socket);
+            std::array<char, 2048> reqbuf{};
+            asio::error_code ec;
+            size_t len = socket.read_some(asio::buffer(reqbuf), ec);
+            std::string response =
+                "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+                "<html><body><h2>Fusion++ Dashboard</h2>"
+                "<pre>";
+            std::ifstream log("reinforce_log.json");
+            if (log) { std::string l; while (std::getline(log, l)) response += l + "\n"; }
+            response += "</pre></body></html>\r\n";
+            asio::write(socket, asio::buffer(response), ec);
+        }
+    } catch (std::exception& e) {
+        std::cout << "[❌] Web dashboard error: " << e.what() << "\n";
+    }
+}
+
+// ====== Script/Log/Reload Bindings ======
+void reload_script(const std::string&) {
+    std::lock_guard<std::mutex> lock(reloadMutex);
+    std::ifstream in("autogen.fpp");
+    if (!in) { std::cout << "[❌] autogen.fpp not found.\n"; return; }
+    std::string line, content;
+    while (std::getline(in, line)) content += line + "\n";
+    lastScript = content;
+    std::cout << "[🔄] Reloaded script.\n";
+}
+void show_log(const std::string&) {
+    std::ifstream f("reinforce_log.json");
+    if (!f) { std::cout << "[❌] No reinforce_log.json.\n"; return; }
+    std::string line;
+    while (std::getline(f, line)) std::cout << line << "\n";
+}
+
+// ====== Main ======
+int main() {
+    // Input actions (can be triggered by local or network)
+    bind_input("reload", reload_script);
+    bind_input("toggle_gpt", [](const std::string&) { toggle_ai_mode("gpt"); });
+    bind_input("toggle_lora", [](const std::string&) { toggle_ai_mode("lora"); });
+    bind_input("run_script", [](const std::string& arg) {
+        std::cout << "[RUN] Executing script (raw):\n" << lastScript << std::endl;
+    });
+    bind_input("run_cutscene", [](const std::string&) {
+        std::ifstream in("cinematic.fpp");
+        if (!in) { std::cout << "[❌] cinematic.fpp not found.\n"; return; }
+        std::string line;
+        while (std::getline(in, line)) std::cout << "[🎬] " << line << std::endl;
+    });
+    bind_input("show_log", show_log);
+    bind_input("run_bytecode", [](const std::string& arg) { run_bytecode(arg); });
+    bind_input("load_bytecode", [](const std::string& arg) { load_bytecode(arg); });
+
+    // Start multiplayer and dashboard servers
+    std::thread(multiplayer_input_listener, 8765).detach();
+    std::thread(web_dashboard, 8080).detach();
+
+    std::cout << "Fusion++ Runtime (type commands or connect multiplayer):\n";
+    std::string cmd, arg;
+    while (true) {
+        std::getline(std::cin, cmd);
+        if (cmd == "exit") break;
+        size_t sp = cmd.find(' ');
+        std::string c = sp != std::string::npos ? cmd.substr(0, sp) : cmd;
+        std::string a = sp != std::string::npos ? cmd.substr(sp + 1) : "";
+        if (inputActions.count(c)) inputActions[c](a);
+        else std::cout << "[!] Unknown command.\n";
+    }
+    std::cout << "[💾] Exiting Fusion++.\n";
+    return 0;
+}
+
