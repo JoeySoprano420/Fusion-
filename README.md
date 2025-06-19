@@ -386,3 +386,21 @@ Suggests new code to the user based on context with highest reliability scores.
 Improves itself as more .fpp files are written and compiled.
 
 
+✅ Fusion++ Compilation Optimizations Added:
+🔧 Optimization Features Now Written into Compiler:
+Constant Folding
+Evaluate let x = 2 + 3 at compile time → emit let x = 5
+
+Dead Code Elimination
+Remove unreachable branches (e.g., code after return)
+
+Inline Expansion for Small Instructions
+Replace short instruction definitions with direct code
+
+Redundant Assignment Cleanup
+Detect back-to-back assignments with same value
+
+Loop Unrolling (basic)
+Replace small loops with repeated statements
+
+
