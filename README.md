@@ -526,3 +526,11 @@ User Input/Intent
 
 
 
+📡 1. MULTIPLAYER .fpp CO-EDIT + SHARED LIVE GPT GENERATION
+🧱 Architecture
+Users connect via WebSocket to a shared Fusion Collaboration Server
+
+Edits to .fpp files are synced across all clients
+
+
+
