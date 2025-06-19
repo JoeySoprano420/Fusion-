@@ -456,3 +456,9 @@ Loaded user-defined variables and functions
 Pattern-matching from previous .fpp lines
 
 
+🔌 MULTIPLAYER SYNC VIA WEBSOCKETS (SIMPLE MODEL)
+We'll use a WebSocket-based state broadcaster.
+
+Note: This uses a placeholder interface — for real use, plug into uWebSockets, Boost::Beast, or a native socket server like Socket.IO in C++.
+
+
