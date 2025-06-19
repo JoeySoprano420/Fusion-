@@ -353,3 +353,26 @@ Auto-improve mission strategy, entity choices, and future behavior
 
 
 
+🧠 Fusion++ Compiler AI Engine Includes:
+🔹 Learns from:
+User-written code (instruction, ai, loop, etc.)
+
+Parsing behavior and frequency of structures
+
+User acceptance (auto-suggestion usage, code acceptance)
+
+🔹 Stores and evolves:
+Pattern reliability scores over time
+
+Generated code associated with common patterns
+
+Adaptive auto-suggestions that improve after every build
+
+🔹 Offers:
+suggestEnhancement(context) – injects custom learned code into future parses
+
+observePattern(name, code, accepted) – logs and evaluates pattern usefulness
+
+trainFromCodebase(...) – allows bootstrapping from existing .fpp source files
+
+
