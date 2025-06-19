@@ -549,3 +549,24 @@ Edits to .fpp files are synced across all clients
 Fusion++ learns what kinds of .fpp scripts perform well, and feeds that back into GPT as fine-tune examples or preference cues.
 
 
+📲 FUSION++ MOBILE COMPANION APP (Flutter + HTTP + Socket IO)
+Features:
+🧰 Tool	✅ Function
+📄 View/edit .fpp	Text editor
+🧠 Request GPT function	Prompt UI
+🎮 Run/test on host	Via socket
+🔁 Push updated script	Save & sync
+📊 Feedback UI	Send result
+
+🏗 App UI Pages:
+Login / Connect to Host IP
+
+.fpp Editor Page
+
+"🧠 Generate With AI" Prompt Modal
+
+📊 Result + Feedback Submit
+
+📡 Run on Host Button
+
+
