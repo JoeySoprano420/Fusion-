@@ -60,6 +60,58 @@ ASTNode parse(const std::vector<Token>& tokens) {
     return root;
 }
 
+// fusionpp_fpp_parser.h
+#pragma once
+#include <string>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <memory>
+#include <map>
+#include <iostream>
+
+enum class NodeType { Func, Let, Print, Unknown };
+struct FppNode {
+    NodeType type;
+    std::string name;
+    std::vector<std::string> args;
+    std::vector<std::shared_ptr<FppNode>> body;
+    FppNode(NodeType t, const std::string& n) : type(t), name(n) {}
+};
+
+class FppParser {
+public:
+    std::vector<std::shared_ptr<FppNode>> parse(const std::string& file) {
+        std::ifstream in(file);
+        std::vector<std::shared_ptr<FppNode>> nodes;
+        std::string line;
+        while (std::getline(in, line)) {
+            std::istringstream ss(line);
+            std::string token; ss >> token;
+            if (token == "func") {
+                std::string fname; ss >> fname;
+                auto fn = std::make_shared<FppNode>(NodeType::Func, fname);
+                while (std::getline(in, line) && line != "endfunc") {
+                    std::istringstream fss(line); std::string tk; fss >> tk;
+                    if (tk == "print") {
+                        std::string rest; std::getline(fss, rest);
+                        fn->body.push_back(std::make_shared<FppNode>(NodeType::Print, rest));
+                    } else if (tk == "let") {
+                        std::string n, eq, v; fss >> n >> eq >> v;
+                        auto let = std::make_shared<FppNode>(NodeType::Let, n);
+                        let->args = {v};
+                        fn->body.push_back(let);
+                    }
+                }
+                nodes.push_back(fn);
+            }
+            // Add more as needed
+        }
+        return nodes;
+    }
+};
+
+
 // ───────────────────────────────────────────────────────────────
 // CodeGen
 // ───────────────────────────────────────────────────────────────
