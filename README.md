@@ -435,3 +435,12 @@ Hot runtime events are written back as .fpp for dev introspection
 ✅ Modular hot reload for dev runtime
 
 
+✅ Features in Action
+| Feature                    | Behavior                                                                 |
+| -------------------------- | ------------------------------------------------------------------------ |
+| 🔄 Bytecode reload         | Modify `mission.fpp` → press `reload` → updated function runs live       |
+| 🎮 Input bindings          | Type `start`, `reload`, or `restore` in console to trigger runtime logic |
+| 🧬 Snapshot/Restore memory | Save and revert variable states like `lives`, `health`, etc.             |
+
+
+
