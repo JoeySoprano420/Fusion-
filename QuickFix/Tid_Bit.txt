@@ -9,3 +9,38 @@ Auto-launch option after install
 Silent install support
 
 Optional install sections
+
+
+
+How to use this script:
+Replace
+
+"fusionpp.ico" and "banner.bmp" with your real branding files
+
+"license.txt" with your license (text file)
+
+Place the script as fusionpp_installer.nsi in your project root
+
+Build with NSIS
+
+Open with NSIS and compile, or run:
+makensis fusionpp_installer.nsi
+
+Test:
+
+Run FusionPP_Setup.exe for a full, branded, silent-capable, license-displaying installer.
+
+🟢 What this adds:
+License Agreement Page (must accept to install)
+
+Your icon & branding (installer & uninstall)
+
+Banner image at the top
+
+Silent install (FusionPP_Setup.exe /S)
+
+User can pick Desktop Shortcut and Asset/Header install
+
+Auto-launches the Fusion++ IDE GUI on completion
+
+Branding text in installer window
