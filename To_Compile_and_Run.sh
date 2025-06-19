@@ -19,3 +19,5 @@ g++ -o fusionpp fusion_compile_main.cpp -lssl -lcrypto
 g++ main_runtime.cpp -std=c++17 -o fusion_live
 ./fusion_live
 
+python gpt_finetune_trainer.py
+# 🔁 Then fine-tune via OpenAI API or load into prompt history
