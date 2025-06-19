@@ -547,3 +547,55 @@ int main() {
     return 0;
 }
 
+std::string emit_opcodes(const std::string& model) {
+    if (model == "gpt") {
+        return "op_push \"GPT\"\nop_log\nop_load \"strategy:gpt.core\"\nop_exec\n";
+    } else if (model == "lora") {
+        return "op_push \"LoRA\"\nop_log\nop_load \"strategy:lora.passive\"\nop_exec\n";
+    }
+    return "op_nop\n";
+}
+
+std::string format_autogen(const std::string& model, const std::string& prompt, const std::string& body) {
+    std::ostringstream out;
+    out << "// [" << model << "] Completion for: " << prompt << "\n";
+    out << "func " << model << "_autogen()\n";
+    out << "  log \"AI model: " << model << "\"\n";
+    out << "  opcode_block {\n"
+        << emit_opcodes(model)
+        << "  }\n";
+    out << "  print \"" << body << "\"\n";
+    out << "endfunc\n";
+    return out.str();
+}
+
+void emit_ast_trace(const std::string& funcCode, const std::string& model) {
+    std::ofstream out("last_ast.trace.json");
+    out << "{\n"
+        << "  \"model\": \"" << model << "\",\n"
+        << "  \"nodes\": [\n";
+
+    // Simple stub trace
+    std::istringstream stream(funcCode);
+    std::string line;
+    while (std::getline(stream, line)) {
+        out << "    {\"type\": \"line\", \"content\": \"" << line << "\"},\n";
+    }
+
+    out.seekp(-2, std::ios_base::end); // remove trailing comma
+    out << "\n  ]\n}\n";
+}
+
+emit_ast_trace(result, model);
+
+std::string write_fpp(const std::string& funcBody, const std::string& model) {
+    std::string filename = model + "_autogen.fpp";
+    std::ofstream out(filename);
+    out << funcBody;
+    return filename;
+}
+
+std::string result = format_autogen(...);
+emit_ast_trace(result, model);
+write_fpp(result, model);
+return result;
