@@ -8,3 +8,8 @@ g++ -o fusionpp fusionpp_massive_core.cpp -lssl -lcrypto
 g++ -o fusionpp main.cpp -lssl -lcrypto
 ./fusionpp
 
+g++ -o fusion_compiler fpp_compiler_main.cpp -lssl -lcrypto
+./fusion_compiler
+./example.exe
+
+
