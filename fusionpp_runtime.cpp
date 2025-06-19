@@ -182,3 +182,8 @@ private:
     }
 };
 
+// In constructor:
+out << "Timestamp,Segment,From,To,MemoryDelta(KB),CPUDelta(s)\n";
+
+// Usage:
+AIModeTracer tracer(prevMode, newMode, currentSegment);
