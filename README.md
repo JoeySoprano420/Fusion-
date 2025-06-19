@@ -34,3 +34,39 @@ TYPE SYSTEM
 | `memory<N>` | byte buffer | Manual memory control     |
 
 
+🚀 KEYWORD SET
+| Keyword          | Purpose                         |
+| ---------------- | ------------------------------- |
+| `define`         | Entity/type/variable definition |
+| `derive`         | Type extension                  |
+| `instruction`    | Function-like execution unit    |
+| `tagged`         | Logical grouping                |
+| `init`, `let`    | Variable declarations           |
+| `on`, `trigger`  | Event bindings                  |
+| `load`, `stream` | Asset and audio control         |
+| `asm`            | Inline low-level execution      |
+| `wrap`           | Derivative override             |
+| `emit`           | Force-output compiled logic     |
+| `patch`          | Inject runtime behavior         |
+
+🎮 AAA GAMEDEV LIBRARY (Standard Module)
+Bundled as fusion.core.game with:
+
+✅ Physics module (colliders, raycasting)
+
+✅ Input manager
+
+✅ Texture/animation manager
+
+✅ Audio stream manager
+
+✅ Scenegraph system
+
+✅ Render batching + instancing
+
+✅ JIT hooks for AI, damage logic, weapon traits
+
+✅ Native OS threading interface
+
+✅ Inline .nasm for low-level gameplay tweaks
+
