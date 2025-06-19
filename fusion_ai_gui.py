@@ -1,5 +1,32 @@
 import tkinter as tk
 from hybrid_ai import hybrid_suggest
+import pandas as pd
+import matplotlib.pyplot as plt
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+class FusionLogWatcher(FileSystemEventHandler):
+    def __init__(self, log_path):
+        self.log_path = log_path
+
+    def on_modified(self, event):
+        if event.src_path.endswith('fusion_mode_transitions.csv'):
+            df = pd.read_csv(self.log_path)
+            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+            df.plot(x='Timestamp', y='MemoryDelta(KB)', title='Memory Delta Over Time')
+            plt.pause(0.01)
+
+log_path = "fusion_mode_transitions.csv"
+event_handler = FusionLogWatcher(log_path)
+observer = Observer()
+observer.schedule(event_handler, path='.', recursive=False)
+observer.start()
+
+try:
+    while True: pass
+except KeyboardInterrupt:
+    observer.stop()
+observer.join()
 
 class AIEditorApp:
     def __init__(self, master):
