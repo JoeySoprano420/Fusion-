@@ -125,6 +125,12 @@ public:
     }
 };
 
+if (node.type == "Loop" && node.value == "repeat_3") {
+    out << "    std::cout << \"Repeated\" << std::endl;\n";
+    out << "    std::cout << \"Repeated\" << std::endl;\n";
+    out << "    std::cout << \"Repeated\" << std::endl;\n";
+}
+
 // === Code Generator ===
 std::string generateCPP(const ASTNode& ast) {
     std::ostringstream out;
@@ -169,4 +175,67 @@ int main() {
     std::cout << "✅ FUSION++ compiled to C++ and built as executable.\n";
 
     return 0;
+}
+
+bool is_constant_expr(const std::string& val) {
+    return std::regex_match(val, std::regex("^[0-9]+([\\+\\-\\*/][0-9]+)*$"));
+}
+
+std::string eval_constant_expr(const std::string& expr) {
+    std::string cmd = "echo $(( " + expr + " )) > tmp.val";
+    std::system(cmd.c_str());
+    std::ifstream in("tmp.val");
+    std::string result;
+    in >> result;
+    return result;
+}
+
+std::string generateOptimizedCPP(const ASTNode& ast) {
+    std::ostringstream out;
+    out << "#include <iostream>\n\nint main() {\n";
+
+    std::set<std::string> assignedVars;
+
+    for (const auto& node : ast.children) {
+        if (node.type == "Init" || node.type == "Let") {
+            std::string name = node.children[0].value;
+            std::string value = node.children[1].value;
+
+            // Constant folding
+            if (is_constant_expr(value)) {
+                value = eval_constant_expr(value);
+                out << "    // folded constant\n";
+            }
+
+            // Redundant assignment cleanup
+            if (assignedVars.count(name)) {
+                out << "    // skipped redundant assignment to '" << name << "'\n";
+                continue;
+            }
+
+            out << "    auto " << name << " = " << value << ";\n";
+            assignedVars.insert(name);
+        }
+
+        else if (node.type == "Instruction") {
+            // Inline expansion
+            if (node.value == "print_hello") {
+                out << "    std::cout << \"Hello from inline expansion!\" << std::endl;\n";
+                continue;
+            }
+        }
+
+        else if (node.type == "On" && node.value == "update") {
+            out << "    // event binding\n";
+            out << "    std::cout << \"On Update\" << std::endl;\n";
+        }
+
+        else if (node.type == "ASM") {
+            out << "    // inline ASM\n";
+            out << "    __asm__(\"movl $0x1, %eax; int $0x80;\");\n";
+        }
+    }
+
+    out << "    return 0;\n}\n";
+    return out.str();
 }
