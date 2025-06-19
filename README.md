@@ -605,4 +605,10 @@ Login / Connect to Host IP
 | Graph execution metrics for all runs           | ✅      |
 
 
+🪟 Windows Task Scheduler
+Trigger: Weekly
+
+Action: Run python weekly_retrain.py
+
+
 
