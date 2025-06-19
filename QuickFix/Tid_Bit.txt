@@ -90,3 +90,30 @@ license.txt (your SUET license, as posted)
 Everything inside the dist folder after build
 
 This script as fusionpp_installer.nsi
+
+
+Here’s an NSIS snippet that adds context-menu (right-click) commands for .fpp files and registers a custom URL protocol (fusionpp://) so your IDE can open files or projects directly via a link.
+
+Also is a plug-and-play section to add to your NSIS installer (add it after the file association section in your script):
+
+📝 What this does:
+Double-click .fpp files to open in your GUI IDE
+
+Right-click context menu for .fpp files:
+
+“Run with Fusion++” (runs in engine/runtime)
+
+“Open in Fusion++ Editor” (opens in GUI editor)
+
+fusionpp:// URLs will open in your IDE, e.g.
+fusionpp://C:/Projects/MyScript.fpp or fusionpp://open?project=MyProj
+
+Uninstall Section Additions
+Remove these keys as well in the uninstall section:
+
+How to Use fusionpp:// URLs:
+In your code, accept argv[1] as a fusionpp:// URL (parse and open the file).
+
+In the browser/address bar/run dialog:
+fusionpp://C:/Projects/Test.fpp
+→ Launches your editor with the target file.
