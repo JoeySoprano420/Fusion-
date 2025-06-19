@@ -571,5 +571,11 @@ Login / Connect to Host IP
 
 
 🔁 YOU NOW HAVE:
+| Module                | What It Does                         |
+| --------------------- | ------------------------------------ |
+| 🧠 Reinforcement Loop | `.fpp` scripts and results train GPT |
+| 📲 Fusion++ App       | Edit, generate, push from mobile     |
+| 📡 Real-time Sync     | Works across devices                 |
+| 📼 Replay & Feedback  | All logged, reviewed, re-used        |
 
 
