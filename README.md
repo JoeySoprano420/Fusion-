@@ -597,3 +597,12 @@ Login / Connect to Host IP
 
 
 
+✅ You Now Have:
+| Feature                                        | Status |
+| ---------------------------------------------- | ------ |
+| Upload successful `.fpp` logs to GPT Fine-Tune | ✅      |
+| Repair failed `.fpp` with GPT suggestions      | ✅      |
+| Graph execution metrics for all runs           | ✅      |
+
+
+
