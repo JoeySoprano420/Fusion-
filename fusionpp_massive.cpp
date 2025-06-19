@@ -298,3 +298,70 @@ int main() {
     return 0;
 }
 
+// ==== AUTO-INJECT, LIVE-TRAINING, & DASHBOARD ====
+#include <filesystem>
+namespace fs = std::filesystem;
+
+class FusionCompiler {
+    CompilerAI compilerAI;
+
+public:
+    void trainFromFolder(const std::string& folderPath) {
+        for (const auto& entry : fs::directory_iterator(folderPath)) {
+            if (entry.path().extension() == ".fpp") {
+                std::ifstream file(entry.path());
+                if (!file.is_open()) continue;
+                std::vector<std::string> lines;
+                std::string line;
+                while (std::getline(file, line)) lines.push_back(line);
+                compilerAI.trainFromCodebase(lines);
+            }
+        }
+        std::cout << "📘 Trained AI from all .fpp files in " << folderPath << "\n";
+    }
+
+    std::string generateCodeWithAI(const std::string& context) {
+        std::string suggestion = compilerAI.suggestEnhancement(context);
+        if (!suggestion.empty()) {
+            std::cout << "💡 Injecting AI-enhanced code: " << suggestion << "\n";
+            return suggestion;
+        }
+        return "// no suggestion from AI\n";
+    }
+
+    void showLearningDashboard() {
+        std::ifstream in("fusion_compiler_ai.json");
+        if (!in.is_open()) {
+            std::cout << "⚠️ No AI learning data available.\n";
+            return;
+        }
+        json j; in >> j;
+        std::cout << "\n===== 🧠 Fusion++ AI Pattern Dashboard =====\n";
+        for (auto& [key, val] : j.items()) {
+            std::cout << "🔹 Pattern: " << key << "\n";
+            std::cout << "   Uses     : " << val["appearances"] << "\n";
+            std::cout << "   Success  : " << val["user_accepts"] << "\n";
+            std::cout << "   Failures : " << val["user_rejects"] << "\n";
+            std::cout << "   Reliability Score: "
+                      << ((val["user_accepts"].get<float>() + 1.0f) / (val["user_rejects"].get<float>() + 1.0f))
+                      << "\n";
+            std::cout << "   Suggested Code: " << val["generatedCode"] << "\n\n";
+        }
+    }
+};
+
+// === Enhanced Compiler Entry Point ===
+int main() {
+    std::cout << "\n🔥 Fusion++ Self-Learning Compiler\n";
+
+    FusionCompiler fusion;
+    fusion.trainFromFolder("./examples");
+
+    std::string injected = fusion.generateCodeWithAI("ai patrol loop");
+    std::cout << "\n📤 Final Injected Code:\n" << injected << "\n";
+
+    fusion.showLearningDashboard();
+
+    return 0;
+}
+
