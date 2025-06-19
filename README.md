@@ -588,3 +588,12 @@ Login / Connect to Host IP
 
 
 
+🧠 Fusion++ AI Learns from You Now
+| Action        | What Happens                            |
+| ------------- | --------------------------------------- |
+| ✅ Run `.fpp`  | Logs success/failure + duration         |
+| ✅ Build AI    | Converts results to prompt-memory       |
+| ✅ Improve GPT | Fine-tune or use as injective prompting |
+
+
+
