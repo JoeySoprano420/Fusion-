@@ -599,3 +599,49 @@ std::string result = format_autogen(...);
 emit_ast_trace(result, model);
 write_fpp(result, model);
 return result;
+
+// fusionpp_bytecode_compiler.h
+#pragma once
+#include "fusionpp_fpp_parser.h"
+#include <unordered_map>
+#include <vector>
+#include <string>
+
+struct Bytecode { std::string op; std::vector<std::string> args; };
+using BytecodeFunc = std::vector<Bytecode>;
+
+class FppBytecodeCompiler {
+public:
+    std::unordered_map<std::string, BytecodeFunc> compile(const std::vector<std::shared_ptr<FppNode>>& nodes) {
+        std::unordered_map<std::string, BytecodeFunc> out;
+        for (const auto& n : nodes) {
+            if (n->type == NodeType::Func) {
+                BytecodeFunc func;
+                for (const auto& b : n->body) {
+                    if (b->type == NodeType::Print) func.push_back({"print", {b->name}});
+                    if (b->type == NodeType::Let) func.push_back({"let", {b->name, b->args[0]}});
+                }
+                out[n->name] = func;
+            }
+        }
+        return out;
+    }
+};
+
+#include "fusionpp_fpp_parser.h"
+#include "fusionpp_bytecode_compiler.h"
+
+// Load and inject at runtime
+void inject_fpp(const std::string& fpp_path) {
+    FppParser parser;
+    auto ast = parser.parse(fpp_path);
+
+    FppBytecodeCompiler compiler;
+    auto bytecode_map = compiler.compile(ast);
+
+    // Register all functions dynamically
+    for (auto& [k, v] : bytecode_map)
+        bytecodeRegistry[k] = v;
+
+    std::cout << "[🔗] Injected bytecode functions from: " << fpp_path << "\n";
+}
