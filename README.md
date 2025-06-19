@@ -332,3 +332,24 @@ Launchable via runFppScriptAsMission("file.fpp")
 ✅ .fpp Mission Runner Integration
 
 
+🧠 Adaptive AI Learning Includes:
+✅ Pattern Recognition
+Tracks usage, success, and failure rates of behaviors (e.g., Chase, Flee, Ambush)
+
+Evaluates behavior effectiveness by zone/environment
+
+✅ Environment-Aware Scoring
+Uses past outcomes to select best behavior for similar situations
+
+✅ Persistence & Memory
+All learning data stored in ai_learning.json
+
+Automatically updated after each recorded encounter
+
+✅ Real-Time Integration
+During gameplay, log AI successes/failures
+
+Auto-improve mission strategy, entity choices, and future behavior
+
+
+
