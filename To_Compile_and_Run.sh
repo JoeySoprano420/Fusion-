@@ -12,4 +12,7 @@ g++ -o fusion_compiler fpp_compiler_main.cpp -lssl -lcrypto
 ./fusion_compiler
 ./example.exe
 
+g++ -o fusionpp fusion_compile_main.cpp -lssl -lcrypto
+./fusionpp
+./main.exe
 
