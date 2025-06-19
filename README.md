@@ -428,3 +428,10 @@ FusionRuntime interprets and executes bytecode, tracks stats, writes JIT feedbac
 Hot runtime events are written back as .fpp for dev introspection
 
 
+🔥 What You Get:
+✅ Hot function registry (dynamic logic injection)
+✅ Live .fpp patch execution on file save
+✅ Engine callbacks via Fusion++ scripting
+✅ Modular hot reload for dev runtime
+
+
