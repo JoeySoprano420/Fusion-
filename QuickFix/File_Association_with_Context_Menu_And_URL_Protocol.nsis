@@ -1,0 +1,26 @@
+Section "File Association for .fpp + Context Menu + fusionpp:// Protocol" SecAssoc
+    ; === Standard .fpp Association ===
+    WriteRegStr HKCR ".fpp" "" "FusionPP.File"
+    WriteRegStr HKCR "FusionPP.File" "" "Fusion++ Script"
+    WriteRegStr HKCR "FusionPP.File\DefaultIcon" "" "$INSTDIR\fusionpp.ico"
+    WriteRegStr HKCR "FusionPP.File\shell\open\command" "" '"$INSTDIR\fusionpp_multiplayer_gui.exe" "%1"'
+
+    ; === Context Menu Command: "Run with Fusion++" ===
+    WriteRegStr HKCR "FusionPP.File\shell\runwithfusionpp" "" "Run with Fusion++"
+    WriteRegStr HKCR "FusionPP.File\shell\runwithfusionpp\command" "" '"$INSTDIR\fusionpp_runtime.exe" "%1"'
+
+    ; === Context Menu Command: "Open in Fusion++ Editor" ===
+    WriteRegStr HKCR "FusionPP.File\shell\openineditor" "" "Open in Fusion++ Editor"
+    WriteRegStr HKCR "FusionPP.File\shell\openineditor\command" "" '"$INSTDIR\fusionpp_multiplayer_gui.exe" "%1"'
+
+    ; === Custom URL Protocol: fusionpp:// ===
+    WriteRegStr HKCR "fusionpp" "" "URL:Fusion++ Protocol"
+    WriteRegStr HKCR "fusionpp" "URL Protocol" ""
+    WriteRegStr HKCR "fusionpp\DefaultIcon" "" "$INSTDIR\fusionpp.ico"
+    WriteRegStr HKCR "fusionpp\shell\open\command" "" '"$INSTDIR\fusionpp_multiplayer_gui.exe" "%1"'
+SectionEnd
+
+; === Uninstall Section Additions:// ===
+    DeleteRegKey HKCR "fusionpp"
+    DeleteRegKey HKCR "FusionPP.File"
+    DeleteRegKey HKCR ".fpp"
