@@ -811,3 +811,41 @@ Works locally or across the LAN/WAN by changing the host value.
 
 
 
+📝 Build Instructions
+Requirements:
+
+Qt 5 or 6 (sudo apt install qtbase5-dev or use Qt Creator)
+
+Build from terminal:
+Bash:
+qmake -project
+qmake
+make
+./fusionpp_multiplayer_gui
+
+Or just use Qt Creator: New Project > Import .cpp > Build & Run
+
+Usage
+Start your fusionpp_runtime server.
+
+Open the GUI, set host/port (default 127.0.0.1:8765).
+A full multiplayer GUI for live scripting and control.
+
+Ready to expand with more GUI elements (file open, command templates, history, etc).
+
+Works on Windows, Linux, and macOS.
+Press Connect.
+
+Enter engine commands (e.g. reload, autorun_fpp autogen.fpp, run_bytecode main).
+
+Output log shows sent/received messages and status.
+
+✅ You now have:
+A full multiplayer GUI for live scripting and control.
+
+Ready to expand with more GUI elements (file open, command templates, history, etc).
+
+Works on Windows, Linux, and macOS.
+
+
+
