@@ -70,3 +70,19 @@ Bundled as fusion.core.game with:
 
 ✅ Inline .nasm for low-level gameplay tweaks
 
+🛠 COMPILER PIPELINE
+Phase 1 – fpp-parse:
+→ Parse FUSION++ into AST
+→ Serialize derivative-instruction logic
+→ Map types and runtime patches
+
+Phase 2 – fpp2c:
+→ Translate high-level .fpp → .cpp
+→ Embed tagged comments for logic traceability
+→ Inline NASM sections preserved as macros
+
+Phase 3 – fpp-jit:
+→ Use LLVM or Clang to compile to .exe
+→ Apply asset map linker
+→ Inject runtime opcode for events, physics, AI hooks
+
