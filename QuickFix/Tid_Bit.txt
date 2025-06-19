@@ -1,0 +1,11 @@
+full-featured NSIS installer script for Fusion++ with:
+
+License page
+
+Custom installer branding (icon, banner, uninstall icon)
+
+Auto-launch option after install
+
+Silent install support
+
+Optional install sections
