@@ -404,3 +404,17 @@ Loop Unrolling (basic)
 Replace small loops with repeated statements
 
 
+✅ Features INCLUDED in this C++ Code:
+Feature	✅ Implemented
+📦 Symbol Table Compression	✅ SymbolTable class with indexing
+⚙️ Inline Function Caching	✅ inlineFunctionCache for prewritten snippets
+🧠 Static SSA Conversion	✅ Converts chained ops into SSA form
+📜 FusionScript IR Generation	✅ Emits IR instructions as op args...
+🌀 Shader Support	✅ loadShader("name")
+🔁 Loop Unrolling	✅ unrolledPrint(...) inlined
+🔍 Introspection	✅ Lists registered symbols
+⏳ Durations Timing	✅ timedOperation(...) wraps any function
+🧵 Texture Loading	✅ loadTexture(...) outputs stream load
+🔐 Encryption (SHA256)	✅ OpenSSL-powered hashing
+
+
