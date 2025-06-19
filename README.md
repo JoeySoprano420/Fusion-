@@ -479,3 +479,28 @@ Note: This uses a placeholder interface — for real use, plug into uWebSockets,
 
 
 
+🔌 How to Plug Into Live Compiler
+You can link FPPFunctionBuilder into the FusionFPPCompiler pipeline:
+
+After parsing .fpp, pass comments like #auto: start mission
+
+Trigger builder.generateFunction("start mission")
+
+Inject result into .fpp or emit .cpp dynamically
+
+💡 Want Next?
+🌐 Real OpenAI API function completion using gpt-4/gpt-4o?
+
+🎛️ Visual UI for selecting or auto-inserting .fpp routines?
+
+🧩 DSL training for custom domain intent mapping (like “cutscene → camera path”)
+
+Say:
+
+Connect to OpenAI API
+
+Add Visual Autogen UI
+
+Train DSL intent map
+
+
