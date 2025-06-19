@@ -778,3 +778,36 @@ What’s Now Live:
 
 
 
+📝 Instructions
+Dependencies
+Standalone Asio:
+Download asio.hpp and put it in your include/ directory, or install via package manager.
+
+Compile
+Bash:
+g++ fusionpp_multiplayer_client.cpp -std=c++17 -Iinclude -o fusionpp_multiclient
+
+Usage
+Start your Fusion++ runtime server (fusionpp_runtime.cpp must be running).
+
+Run the client:
+bash:
+./fusionpp_multiclient
+
+Type any engine command:
+reload
+run_bytecode hello
+autorun_fpp autogen.fpp
+or any custom bound command
+
+See the results in your server’s console/output!
+
+✅ What this achieves:
+Remote control of the engine from any machine
+
+Live multiplayer scripting—any connected user can inject, run, and manage .fpp code
+
+Works locally or across the LAN/WAN by changing the host value.
+
+
+
