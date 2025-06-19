@@ -48,7 +48,116 @@ class AIEditorApp:
         for line in intent.split("\n"):
             if not line.strip(): continue
             print(f"[Intent]: {line}")
-            code = hybrid_suggest(line.strip())
+            code = hybrid_suggest(line.strip())#include <QSyntaxHighlighter>
+#include <QTextCharFormat>
+#include <QRegularExpression>
+#include <QTextDocument>
+
+class FppHighlighter : public QSyntaxHighlighter {
+public:
+    FppHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent) {
+        // Keyword highlighting (let, func, print, etc.)
+        QTextCharFormat keywordFormat;
+        keywordFormat.setForeground(Qt::darkBlue);
+        keywordFormat.setFontWeight(QFont::Bold);
+        QStringList keywords = {"let", "func", "endfunc", "print", "emit", "asm", "derive"};
+        for (const QString& k : keywords)
+            rules.append({QRegularExpression("\\b"+k+"\\b"), keywordFormat});
+
+        // String highlighting
+        QTextCharFormat stringFormat;
+        stringFormat.setForeground(Qt::darkGreen);
+        rules.append({QRegularExpression("\".*\""), stringFormat});
+    }
+
+protected:
+    void highlightBlock(const QString& text) override {
+        for (const HighlightRule& r : rules) {
+            QRegularExpressionMatchIterator i = r.pattern.globalMatch(text);
+            while (i.hasNext()) {
+                QRegularExpressionMatch match = i.next();
+                setFormat(match.capturedStart(), match.capturedLength(), r.format);
+            }
+        }
+    }
+private:
+    struct HighlightRule {
+        QRegularExpression pattern;
+        QTextCharFormat format;
+    };
+    QVector<HighlightRule> rules;
+};
+
+fppEdit = new QTextEdit;
+highlighter = new FppHighlighter(fppEdit->document());
+
+// --- AI Prompt Tab ---
+QWidget* aiTab = new QWidget;
+QLineEdit* aiPromptEdit = new QLineEdit;
+QPushButton* aiGenBtn = new QPushButton("Generate");
+QTextEdit* aiOutput = new QTextEdit;
+aiOutput->setReadOnly(true);
+
+QHBoxLayout* aiInputLayout = new QHBoxLayout;
+aiInputLayout->addWidget(aiPromptEdit);
+aiInputLayout->addWidget(aiGenBtn);
+
+QVBoxLayout* aiTabLayout = new QVBoxLayout;
+aiTabLayout->addLayout(aiInputLayout);
+aiTabLayout->addWidget(aiOutput);
+aiTab->setLayout(aiTabLayout);
+
+tabs->addTab(aiTab, "AI Generator");
+
+connect(aiGenBtn, &QPushButton::clicked, [=]() {
+    QString prompt = aiPromptEdit->text().trimmed();
+    if (prompt.isEmpty()) return;
+    aiGenBtn->setEnabled(false);
+    aiOutput->append("> " + prompt);
+
+    // You can use QProcess to run a python script or REST to a backend
+    QProcess process;
+    process.start("python", QStringList() << "ai_bridge.py" << prompt);
+    process.waitForFinished();
+    QString result = process.readAllStandardOutput();
+    aiOutput->append(result);
+    aiGenBtn->setEnabled(true);
+});
+
+// --- AI Prompt Tab ---
+QWidget* aiTab = new QWidget;
+QLineEdit* aiPromptEdit = new QLineEdit;
+QPushButton* aiGenBtn = new QPushButton("Generate");
+QTextEdit* aiOutput = new QTextEdit;
+aiOutput->setReadOnly(true);
+
+QHBoxLayout* aiInputLayout = new QHBoxLayout;
+aiInputLayout->addWidget(aiPromptEdit);
+aiInputLayout->addWidget(aiGenBtn);
+
+QVBoxLayout* aiTabLayout = new QVBoxLayout;
+aiTabLayout->addLayout(aiInputLayout);
+aiTabLayout->addWidget(aiOutput);
+aiTab->setLayout(aiTabLayout);
+
+tabs->addTab(aiTab, "AI Generator");
+
+connect(aiGenBtn, &QPushButton::clicked, [=]() {
+    QString prompt = aiPromptEdit->text().trimmed();
+    if (prompt.isEmpty()) return;
+    aiGenBtn->setEnabled(false);
+    aiOutput->append("> " + prompt);
+
+    // You can use QProcess to run a python script or REST to a backend
+    QProcess process;
+    process.start("python", QStringList() << "ai_bridge.py" << prompt);
+    process.waitForFinished();
+    QString result = process.readAllStandardOutput();
+    aiOutput->append(result);
+    aiGenBtn->setEnabled(true);
+});
+
+
             suggestions.append(f"// Intent: {line}\n{code}\n")
         self.output.delete("1.0", tk.END)
         self.output.insert(tk.END, "\n---\n".join(suggestions))
@@ -56,3 +165,4 @@ class AIEditorApp:
 root = tk.Tk()
 app = AIEditorApp(root)
 root.mainloop()
+
