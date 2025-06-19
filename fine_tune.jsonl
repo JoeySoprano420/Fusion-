@@ -1,1 +1,9 @@
+{"messages":[
+  {"role":"user","content":"Write a .fpp function that:\nfunc heal...\n"},
+  {"role":"assistant","content":"func heal_player\n  let health = 100\nendfunc"}
+]}
+{"messages":[
+  {"role":"user","content":"Write a .fpp function that:\nfunc spawn...\n"},
+  {"role":"assistant","content":"func spawn_enemy\n  let x = 1\nendfunc"}
+]}
 
