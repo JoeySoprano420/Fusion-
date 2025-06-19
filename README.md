@@ -757,3 +757,24 @@ Download nlohmann/json header (put as include/json.hpp)
 Compile with:
 bash:
 g++ fusionpp_runtime.cpp -std=c++17 -lpthread -o fusionpp_runtime
+
+Dependencies/Notes
+nlohmann/json: Place json.hpp in your include folder.
+
+Standalone Asio: Download and include Asio headers (download here).
+
+Compile:
+Bash:
+g++ fusionpp_runtime.cpp -std=c++17 -Iinclude -lpthread -o fusionpp_runtime
+
+What’s Now Live:
+| Feature                  | Command/Interface                           |
+| ------------------------ | ------------------------------------------- |
+| Multiplayer input        | TCP 8765, send e.g. `run_bytecode hello`    |
+| Web dashboard            | Open browser to `http://localhost:8080`     |
+| Dynamic bytecode loading | `load_bytecode your.bytecode` in console    |
+| Bytecode execution       | `run_bytecode func_name` in console/network |
+| All engine actions       | Trigger via console, multiplayer, or web    |
+
+
+
